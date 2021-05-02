@@ -36,11 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: _customPaint()
       ),
 
-      floatingActionButton: AnimatedFabGroup(
-        _viewModel.onRevert,
-        _viewModel.onForward,
-        _viewModel.clear
-      ),
+      floatingActionButton: AnimatedFabGroup(_viewModel),
     );
   }
 

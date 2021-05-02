@@ -19,6 +19,9 @@ class HomeViewModel {
 
   Stream get offsets => _subject.stream;
 
+  bool get hasPrevious => _drawings.isNotEmpty;
+  bool get hasForwards => _forwards.isNotEmpty;
+
   void onPanChange(Object details) {
     Offset offset;
     if (details is DragStartDetails)
@@ -30,7 +33,8 @@ class HomeViewModel {
   }
 
   void onPanEnd(DragEndDetails details) {
-    _subject.add(_drawings..add(_current..add(TouchPoint(null, null))));
+    _current.add(TouchPoint(color, null));
+    _subject.add(_drawings..add(_current));
     _current = [];
     _forwards = [];
   }
@@ -43,16 +47,14 @@ class HomeViewModel {
   }
 
   onRevert() {
-    // if (_drawings.isEmpty) return;
-    print(">>> onRevert1 ${_drawings.length} \n");
+    if (_drawings.isEmpty) return;
     var last = _drawings.removeLast();
     _forwards.add(last);
-    print(">>> onRevert2 ${_drawings.length} \n");
     _subject.add(_drawings);
   }
 
   onForward() {
-    // if (_forwards.isEmpty) return;
+    if (_forwards.isEmpty) return;
     var forward = _forwards.removeLast();
     _subject.add(_drawings..add(forward));
   }
