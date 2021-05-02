@@ -1,4 +1,4 @@
-import 'package:collab_draw_app/ui/home_page.dart';
+import 'package:collab_draw_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {

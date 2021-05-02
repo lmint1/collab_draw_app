@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:collab_draw_app/models/touch_point.dart';
-import 'package:collab_draw_app/ui/home_view_model.dart';
+import 'package:collab_draw_app/widgets/AnimatedFabGroup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'home_view_model.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -30,24 +32,26 @@ class _MyHomePageState extends State<MyHomePage> {
       body: GestureDetector(
           onPanStart: _viewModel.onPanChange,
           onPanUpdate: _viewModel.onPanChange,
-          onPanEnd: _viewModel.onPanChange,
+          onPanEnd: _viewModel.onPanEnd,
           child: _customPaint()
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.autorenew_outlined, color: Colors.white),
-        onPressed: _viewModel.clear,
+
+      floatingActionButton: AnimatedFabGroup(
+        _viewModel.onRevert,
+        _viewModel.onForward,
+        _viewModel.clear
       ),
     );
   }
 
   Widget _customPaint() {
-    return StreamBuilder(
+    return StreamBuilder<List<List<TouchPoint>>>(
       stream: _viewModel.offsets,
       builder: (context, snap) {
-        final data = (snap.data ?? []).asMap();
+        final flatData = snap.data.expand((element) => element).toList();
         return CustomPaint(
           size: Size.infinite,
-          painter: CollabPainter(data),
+          painter: CollabPainter((flatData ?? []).asMap()),
         );
       },
     );
@@ -60,8 +64,8 @@ class CollabPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..strokeWidth = 5.0;
+    if (points.isEmpty) return;
+    var paint = Paint()..strokeWidth = 5.0;
 
     points.forEach((index, current) {
       final next = points[index + 1];
