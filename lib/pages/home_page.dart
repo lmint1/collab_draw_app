@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:collab_draw_app/models/touch_point.dart';
-import 'package:collab_draw_app/widgets/AnimatedFabGroup.dart';
+import 'package:collab_draw_app/widgets/animated_fab_group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
