@@ -48,18 +48,6 @@ class _ChooseColorDialogState extends State<ChooseColorDialog> {
     );
 }
 
-class _CloseButton extends StatelessWidget {
-  final Function _onPressed;
-
-  const _CloseButton(this._onPressed);
-
-  @override
-  Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: IconButton(
-          icon: Icon(Icons.clear, color: Colors.grey), onPressed: _onPressed));
-}
-
 class _ColorItem extends StatelessWidget {
   final Color color;
   final bool isSelected;
