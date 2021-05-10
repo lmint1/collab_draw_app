@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 class HomeViewModel {
 
-  final Color color;
+  Color color;
   List<TouchPoint> _current = [];
 
   List<List<TouchPoint>> _drawings = [];

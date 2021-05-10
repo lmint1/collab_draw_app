@@ -2,6 +2,8 @@ import 'package:collab_draw_app/pages/home_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'choose_color_dialog.dart';
+
 class AnimatedFabGroup extends StatefulWidget {
   final HomeViewModel viewModel;
 
@@ -71,25 +73,10 @@ class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
         ),
       ]);
 
-  void _settingModalBottomSheet(context){
-    final colors = Colors.primaries;
-    final controller = FixedExtentScrollController();
-    showModalBottomSheet(context: context,
-        builder: (BuildContext bc){
-          return SizedBox(
-            height: 400,
-            child: Stack(
-              children: <Widget>[
-                Expanded(
-                  child: ListWheelScrollView(
-                    itemExtent: 100.0,
-                    children: colors.map((e) => ListTile(tileColor: e)).toList(),
-                  ),
-                )
-              ],
-            ),
-          );
-        }
-    );
+  void _settingModalBottomSheet(context) async {
+    final color = await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ChooseColorDialog()));
+    if (color == null) return;
+    viewModel.color = color;
   }
 }

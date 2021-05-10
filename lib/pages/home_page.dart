@@ -35,7 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
           onPanEnd: _viewModel.onPanEnd,
           child: _customPaint()
       ),
-
       floatingActionButton: AnimatedFabGroup(_viewModel),
     );
   }
