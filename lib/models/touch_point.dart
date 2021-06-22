@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 
 class TouchPoint {
@@ -7,17 +9,17 @@ class TouchPoint {
   TouchPoint(this.color, this.offset);
 
   TouchPoint.fromJson(Map<String, dynamic> json):
-        color = Color(json["color"]),
-        offset = _fromValueList(json["off"]);
+        color = Color(json['color']),
+        offset = _fromValueList(json['offset']);
 
   Map<String, dynamic> toJson() => {
     'color': color.value,
-    'offset': [offset.dx, offset.dy],
+    'offset': offset == null ? null : [offset.dx, offset.dy],
   };
 
-  static Offset _fromValueList(List<double> array) {
+  static Offset _fromValueList(List<dynamic> array) {
     try { return Offset(array[0], array[1]); }
-    on Exception { return null; }
+    on Error { return null; }
   }
 
   bool hasOffset() => offset != null;

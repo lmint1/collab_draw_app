@@ -43,7 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return StreamBuilder<List<List<TouchPoint>>>(
       stream: _viewModel.offsets,
       builder: (context, snap) {
-        final flatData = snap.data.expand((element) => element).toList();
+        final flatData = (snap.data ?? [[]]).expand((element) => element)
+            .toList();
         return CustomPaint(
           size: Size.infinite,
           painter: CollabPainter((flatData ?? []).asMap()),

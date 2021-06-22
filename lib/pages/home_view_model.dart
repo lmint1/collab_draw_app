@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'package:collab_draw_app/models/touch_point.dart';
+import 'package:collab_draw_app/utils/web_socket_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
-//https://medium.com/flutter-community/working-with-sockets-in-dart-15b443007bc9
-class HomeViewModel {
 
+class HomeViewModel with WebSocketDelegate {
   Color color;
   List<TouchPoint> _current = [];
 
@@ -16,25 +15,15 @@ class HomeViewModel {
   BehaviorSubject<List<List<TouchPoint>>> _subject;
   BehaviorSubject<List<List<TouchPoint>>> _remoteSubject;
 
-  WebSocket _socket;
+  WebSocketHelper _socket;
 
-  HomeViewModel(this.color){
+  HomeViewModel(this.color) {
     _subject = BehaviorSubject.seeded(_drawings);
     _remoteSubject = BehaviorSubject.seeded(null);
-    startListening();
+    _socket = WebSocketHelper("wss://192.168.1.4", this);
   }
 
-  void startListening() async {
-    _socket = await WebSocket.connect("wss://localhost");
-    _socket.listen(
-      (event) => print('Server: $event'),
-      onError: (error) => print(error),
-      onDone: () => print("Done"),
-    );
-    _socket.add("Test 1");
-  }
-
-  Stream get offsets => _subject.stream;
+  Stream get offsets => _subject.mergeWith([_remoteSubject]);
   bool get hasPrevious => _drawings.isNotEmpty;
   bool get hasForwards => _forwards.isNotEmpty;
 
@@ -45,11 +34,15 @@ class HomeViewModel {
     if (details is DragUpdateDetails)
       offset = details.localPosition;
     _current.add(TouchPoint(color, offset));
-    _subject.add([..._drawings, _current]);
-    // teste++;
-    // String message = 'Hello Moto $teste';
-    // _channel.write(message);
-    // _channel.sink.add([..._drawings, _current]);
+
+    final currentDraw = [..._drawings, _current];
+    _subject.add(currentDraw);
+    _socket.add(currentDraw);
+  }
+
+  @override
+  void onData(List<List<TouchPoint>> data) {
+    _remoteSubject.add(data);
   }
 
   void onPanEnd(DragEndDetails details) {
@@ -61,7 +54,7 @@ class HomeViewModel {
 
   void dispose() {
     _subject.close();
-    _socket.close();
+    _socket.dispose();
     _remoteSubject.close();
   }
 
