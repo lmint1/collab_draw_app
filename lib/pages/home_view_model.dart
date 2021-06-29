@@ -17,15 +17,20 @@ class HomeViewModel with WebSocketDelegate {
 
   WebSocketHelper _socket;
 
+  TouchPoint get pointSeparator => TouchPoint(color, null);
+
   HomeViewModel(this.color) {
     _subject = BehaviorSubject.seeded(_drawings);
     _remoteSubject = BehaviorSubject.seeded([]);
     _socket = WebSocketHelper("wss://192.168.1.4", this);
   }
 
-  Stream get offsets => CombineLatestStream.combine2<List<List<TouchPoint>>, List<List<TouchPoint>>, List<List<TouchPoint>>>(
-      _subject, _remoteSubject, (a, b) => [...a, [TouchPoint(color, null)], ...b, [TouchPoint(color, null)]]
+  Stream<List<List<TouchPoint>>> get offsets => CombineLatestStream.combine2(
+      _subject, _remoteSubject,
+      // Combines A and B in a single Stream of List<List<TouchPoint>>
+      (a, b) => [...a, [pointSeparator], ...b, [pointSeparator]]
   );
+
   bool get hasPrevious => _drawings.isNotEmpty;
   bool get hasForwards => _forwards.isNotEmpty;
 
