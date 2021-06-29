@@ -16,11 +16,13 @@ class AnimatedFabGroup extends StatefulWidget {
 class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
   var _show = false;
   var counter = 0;
+  Color _color = Colors.blue;
 
   HomeViewModel get viewModel => widget.viewModel;
 
   @override
   Widget build(BuildContext context) {
+    _color = viewModel.color;
     return SizedBox(
         height: 200,
         width: 200,
@@ -37,6 +39,7 @@ class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
           bottom: _show ? 65 : 0,
           right: 0,
           child: FloatingActionButton(
+            backgroundColor: _color,
             child: Icon(Icons.color_lens, color: Colors.white),
             onPressed: () => _settingModalBottomSheet(context),
           ),
@@ -47,7 +50,7 @@ class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
           right: _show ? 130 : 0,
           bottom: 0,
           child: FloatingActionButton(
-            backgroundColor: viewModel.hasPrevious ? Colors.blue : Colors.grey,
+            backgroundColor: viewModel.hasPrevious ? _color : Colors.grey,
             child: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: viewModel.hasPrevious ? viewModel.onRevert : null,
           ),
@@ -58,7 +61,7 @@ class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
           right: _show ? 65 : 0,
           bottom: 0,
           child: FloatingActionButton(
-            backgroundColor: viewModel.hasForwards ? Colors.blue : Colors.grey,
+            backgroundColor: viewModel.hasForwards ? _color : Colors.grey,
             child: Icon(Icons.arrow_forward, color: Colors.white),
             onPressed: viewModel.hasForwards ? viewModel.onForward : null,
           ),
@@ -67,6 +70,7 @@ class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
           right: 0,
           bottom: 0,
           child: FloatingActionButton(
+            backgroundColor: _color,
             child: Icon(Icons.more_horiz, color: Colors.white),
             onPressed: () => setState(() => _show = !_show),
           ),
@@ -78,5 +82,6 @@ class _AnimatedFabGroupState extends State<AnimatedFabGroup> {
         MaterialPageRoute(builder: (context) => ChooseColorDialog()));
     if (color == null) return;
     viewModel.color = color;
+    setState(() => _color = color);
   }
 }

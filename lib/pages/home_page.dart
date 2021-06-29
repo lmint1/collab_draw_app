@@ -28,7 +28,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text(widget.title))),
+      appBar: AppBar(
+        title: Center(child: Text(
+            widget.title,
+            style: TextStyle(color: Colors.black),
+        )),
+        backgroundColor: Colors.white,
+      ),
       body: GestureDetector(
           onPanStart: _viewModel.onPanChange,
           onPanUpdate: _viewModel.onPanChange,
@@ -43,7 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return StreamBuilder<List<List<TouchPoint>>>(
       stream: _viewModel.offsets,
       builder: (context, snap) {
-        final flatData = (snap.data ?? [[]]).expand((element) => element)
+        final flatData = (snap.data ?? [[]])
+            .expand((element) => element)
             .toList();
         return CustomPaint(
           size: Size.infinite,
