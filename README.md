@@ -1,16 +1,14 @@
-# collab_draw_app
+# Collaborative Drawing App
 
-A POC in flutter using CustomPainter to draw and integrating with a WebSocket backend.
+This project is collaborative drawing app that uses WenSocket to receive and draw other user's drawing.
+It was made basically using [CustomPaint](https://api.flutter.dev/flutter/rendering/CustomPainter-class.html) and [RxDart](https://pub.dev/packages/rxdart).
 
-## Getting Started
+# Features
 
-This project is a starting point for a Flutter application.
+| **Drawing + Undo/Redo** | **Change color**  |
+|:---:|:---:|
+|![](gifs/undo_redo.gif) |![](gifs/change_color.gif) |
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+| **Collaborative iOS and Android** |
+|:---:|
+|![](gifs/collaborative.gif) |
