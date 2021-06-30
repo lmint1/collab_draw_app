@@ -22,7 +22,7 @@ class HomeViewModel with WebSocketDelegate {
   HomeViewModel(this.color) {
     _subject = BehaviorSubject.seeded(_drawings);
     _remoteSubject = BehaviorSubject.seeded([]);
-    _socket = WebSocketHelper("wss://192.168.1.4", this);
+    _socket = WebSocketHelper("wss://localhost", this);
   }
 
   Stream<List<List<TouchPoint>>> get offsets => CombineLatestStream.combine2(
